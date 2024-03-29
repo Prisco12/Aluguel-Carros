@@ -19,7 +19,7 @@ export class Cars {
   gasAvailable: boolean;
 
   @Prop({ required: true })
-  category: Categoria;
+  idCategory: string;
 }
 
 export const CarsSchema = SchemaFactory.createForClass(Cars);

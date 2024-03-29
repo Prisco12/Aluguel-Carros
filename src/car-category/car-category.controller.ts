@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+/* eslint-disable prettier/prettier */
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put } from '@nestjs/common';
 import { CarCategoryService } from './car-category.service';
 import { CreateCarCategoryDto } from './dto/create-car-category.dto';
 import { UpdateCarCategoryDto } from './dto/update-car-category.dto';
@@ -12,19 +13,15 @@ export class CarCategoryController {
     return this.carCategoryService.create(createCarCategoryDto);
   }
 
-  @Get()
-  findAll() {
-    return this.carCategoryService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.carCategoryService.findOne(+id);
+    return this.carCategoryService.findCategory(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCarCategoryDto: UpdateCarCategoryDto) {
-    return this.carCategoryService.update(+id, updateCarCategoryDto);
+  updateCarsIds(@Param('id') id: string, @Body() body: {carIds: string[]}) {
+    const {carIds} = body;
+    return this.carCategoryService.updateCarIds(id, carIds);
   }
 
   @Delete(':id')

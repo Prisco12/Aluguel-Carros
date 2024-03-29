@@ -32,7 +32,7 @@ export class CreateCarCategoryDto {
   name: Categoria;
 
   @IsString()
-  carIds: string;
+  carIds: string[];
 
   @IsNotEmpty()
   @IsNumber()

@@ -26,6 +26,5 @@ export class CreateCarDto {
   gasAvailable: boolean;
 
   @IsNotEmpty()
-  @IsValidCategoria()
-  category: Categoria;
+  idCategoria: string;
 }

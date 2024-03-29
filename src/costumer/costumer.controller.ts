@@ -5,30 +5,33 @@ import { UpdateCostumerDto } from './dto/update-costumer.dto';
 
 @Controller('costumer')
 export class CostumerController {
-  constructor(private readonly costumerService: CostumerService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post()
-  create(@Body() createCostumerDto: CreateCostumerDto) {
-    return this.costumerService.create(createCostumerDto);
+  create(@Body() createUserDto: CreateUserDto) {
+      return this.usersService.create(createUserDto)
   }
 
+  @Get(':username')
+  findOne(@Param('username') username: string) {
+      try {
+          return this.usersService.findOne(username)
+      } catch (error) {
+          throw new HttpException({
+              status: HttpStatus.FORBIDDEN,
+              error: 'This is a custom message'
+          },
+              HttpStatus.FORBIDDEN,
+              {
+                  cause: error
+              }
+          )
+      }
+  }
+
+  @UseGuards(AuthGuard)
   @Get()
   findAll() {
-    return this.costumerService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.costumerService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCostumerDto: UpdateCostumerDto) {
-    return this.costumerService.update(+id, updateCostumerDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.costumerService.remove(+id);
+      return this.usersService.findAll()
   }
 }

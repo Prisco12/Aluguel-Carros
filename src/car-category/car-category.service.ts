@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { CreateCarCategoryDto } from './dto/create-car-category.dto';
 import { UpdateCarCategoryDto } from './dto/update-car-category.dto';
@@ -25,8 +26,55 @@ export class CarCategoryService {
     return this.carCategoryModel.find().exec();
   }
 
-  findOne(id: number) {
-    return thius;
+  async findCategory(id: string): Promise<CarCategory> {
+    const category = await this.carCategoryModel.findById(id).exec();
+    return category;
+  }
+
+  async updateCarIds(id: string, carIds: string[]): Promise<CarCategory> {
+    try {
+    const category = await this.carCategoryModel.findById(id).exec();
+    if (!category) {
+      // Trate o caso em que a categoria não foi encontrada
+      throw new Error('Categoria não encontrada');
+    }
+    const idRemoverCar = (
+      .carIds || []).filter((idCars) => {
+      category.carIds.includes(idCars);
+    });
+
+    await this.carCategoryModel.findByIdAndUpdate(id,
+    {
+      name: category.name,
+      price: category.price,
+      $pull: {
+        carIds: {$in: idRemoverCar}
+      },
+    },
+    {new: true}).exec()
+
+    const idAddCar = carIds.filter((idCars) => {
+      !category.carIds.includes(idCars);
+    });
+
+    await this.carCategoryModel.findByIdAndUpdate(id,
+      {
+        name: category.name,
+        price: category.price,
+        $addToSet: {
+          carIds: {$each: idAddCar}
+        },
+      },
+      {new: true}).exec()
+
+
+    
+
+
+    return category;
+  } catch (error) {
+    throw new Error(`Erro au atualizar a Categoria, ${error}`)
+  }
   }
 
   update(id: number, updateCarCategoryDto: UpdateCarCategoryDto) {

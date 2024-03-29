@@ -4,23 +4,29 @@ import { UpdateCostumerDto } from './dto/update-costumer.dto';
 
 @Injectable()
 export class CostumerService {
-  create(createCostumerDto: CreateCostumerDto) {
-    return 'This action adds a new costumer';
+  constructor(@InjectModel(Costumer.name) private CostumerModel: Model<Costumer>) { }
+
+  async create(createCostumerDto: CreateCostumerDto) {
+    createCostumerDto.password = await this.CostumerHash(createCostumerDto.password)
+
+    this.CostumerModel.create(createCostumerDto)
+  }
+
+  findOne(Costumername: string) {
+    const findedCostumer = this.CostumerModel.findOne({ Costumername: Costumername })
+    return findedCostumer;
   }
 
   findAll() {
-    return `This action returns all costumer`;
+    const findedCostumers = this.CostumerModel.find().select("-password")
+    return findedCostumers
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} costumer`;
-  }
-
-  update(id: number, updateCostumerDto: UpdateCostumerDto) {
-    return `This action updates a #${id} costumer`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} costumer`;
+  private async CostumerHash(pass) {
+    const saltOrRounds = 10
+    const hashedPass = await bcrypt.
+    
+    hash(pass, saltOrRounds)
+    return hashedPass
   }
 }

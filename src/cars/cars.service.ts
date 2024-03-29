@@ -20,14 +20,14 @@ export class CarsService {
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} car`;
+    return this.carsModel.findOne({ id: id });
   }
 
-  update(id: number, updateCarDto: UpdateCarDto) {
-    return `This action updates a #${id} car`;
+  update(id: number, updateData: UpdateCarDto) {
+    return this.carsModel.findByIdAndUpdate({ _id: id, updateData });
   }
 
   remove(id: number) {
-    return `This action removes a #${id} car`;
+    return this.carsModel.deleteOne({ id: id });
   }
 }

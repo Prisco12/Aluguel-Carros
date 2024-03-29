@@ -10,7 +10,7 @@ export class CarCategory {
   name: string;
 
   @Prop()
-  carIds: string;
+  carIds: string[];
 
   @Prop({ required: true })
   price: number;
